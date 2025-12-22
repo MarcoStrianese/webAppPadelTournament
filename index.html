@@ -9,6 +9,9 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .active-tab { border-bottom: 4px solid #3b82f6; color: #3b82f6; }
+        /* Scrollbar sottile per la chat */
+        #chat-container::-webkit-scrollbar { width: 4px; }
+        #chat-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -18,37 +21,60 @@
         <button id="btn-admin" onclick="toggleAdmin()" class="bg-blue-800 text-[10px] px-3 py-1 rounded uppercase font-bold">Admin Login</button>
     </header>
 
-    <nav class="bg-white shadow-sm flex justify-around text-sm font-semibold uppercase text-gray-600 sticky top-[60px] z-10">
-        <button onclick="openTab('gironi')" id="tab-gironi" class="p-4 flex-1 active-tab">Gironi</button>
-        <button onclick="openTab('turni')" id="tab-turni" class="p-4 flex-1">Turni</button>
-        <button onclick="openTab('classifica')" id="tab-classifica" class="p-4 flex-1">Classifica</button>
-        <button onclick="openTab('finali')" id="tab-finali" class="p-4 flex-1">Finali</button>
+    <nav class="bg-white shadow-sm flex overflow-x-auto text-sm font-semibold uppercase text-gray-600 sticky top-[60px] z-10 border-b">
+        <button onclick="openTab('gironi')" id="tab-gironi" class="p-4 flex-1 min-w-[90px] active-tab">Gironi</button>
+        <button onclick="openTab('turni')" id="tab-turni" class="p-4 flex-1 min-w-[90px]">Turni</button>
+        <button onclick="openTab('classifica')" id="tab-classifica" class="p-4 flex-1 min-w-[100px]">Classifica</button>
+        <button onclick="openTab('finali')" id="tab-finali" class="p-4 flex-1 min-w-[80px]">Finali</button>
+        <button onclick="openTab('trash')" id="tab-trash" class="p-4 flex-1 min-w-[110px] text-red-500">Trash Talk 🌶️</button>
+        <button onclick="openTab('regole')" id="tab-regole" class="p-4 flex-1 min-w-[100px]">Regole</button>
     </nav>
 
     <main class="p-4 pb-20">
         <section id="gironi" class="tab-content active">
-            <h2 class="text-lg font-bold mb-4">Gironi Iniziali</h2>
-            <div id="gironi-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <p class="text-gray-500 italic">Caricamento gironi...</p>
-            </div>
+            <h2 class="text-lg font-bold mb-4 italic text-blue-800">Gironi Iniziali</h2>
+            <div id="gironi-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"><p class="text-gray-500 italic text-sm">Caricamento...</p></div>
         </section>
 
         <section id="turni" class="tab-content">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-bold">Programma Partite</h2>
-                <button id="btn-reset" onclick="resetTorneo()" class="hidden bg-red-500 text-white text-[10px] px-2 py-1 rounded shadow-sm hover:bg-red-600 uppercase font-bold">Reset Punteggi</button>
+            <div class="flex justify-between items-center mb-4 text-blue-800">
+                <h2 class="text-lg font-bold italic">Programma Partite</h2>
+                <button id="btn-reset" onclick="resetTorneo()" class="hidden bg-red-500 text-white text-[10px] px-2 py-1 rounded uppercase font-bold">Reset</button>
             </div>
-            <div id="partite-container" class="space-y-6">
-                <p class="text-gray-500 italic">Caricamento turni...</p>
-            </div>
+            <div id="partite-container" class="space-y-6"><p class="text-gray-500 italic text-sm">Caricamento...</p></div>
         </section>
 
         <section id="classifica" class="tab-content"></section>
+        <section id="finali" class="tab-content"><h2 class="text-lg font-bold mb-4 italic text-blue-800">Fase Finale</h2><div id="finali-container" class="space-y-4"></div></section>
 
-        <section id="finali" class="tab-content">
-            <h2 class="text-lg font-bold mb-4">Fase Finale</h2>
-            <div id="finali-container" class="space-y-4">
+        <section id="trash" class="tab-content">
+            <h2 class="text-lg font-bold mb-1 italic text-red-600 uppercase">Trash Talking Hub</h2>
+            <p class="text-[10px] text-gray-500 mb-4 uppercase font-bold">Niente sconti, solo cattiveria (sportiva)</p>
+            
+            <div class="bg-white rounded-xl shadow-lg border border-red-100 flex flex-col h-[500px]">
+                <div id="chat-container" class="flex-grow p-4 overflow-y-auto space-y-4 flex flex-col-reverse">
+                    </div>
+                <div class="p-3 border-t bg-gray-50 rounded-b-xl">
+                    <div class="flex flex-col space-y-2">
+                        <input type="text" id="chat-user" placeholder="Tuo Nome" class="text-xs p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
+                        <div class="flex space-x-2">
+                            <input type="text" id="chat-msg" placeholder="Scrivi un insulto costruttivo..." class="flex-grow text-sm p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
+                            <button onclick="inviaMessaggio()" class="bg-red-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-600 transition">Invia</button>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="regole" class="tab-content">
+            <h2 class="text-lg font-bold mb-4 italic text-blue-800">Regolamento</h2>
+            <div class="bg-white p-5 rounded-xl shadow border text-gray-700 text-sm space-y-3 leading-snug">
+                <p><strong>1.</strong> 2 gironi da 4 squadre.</p>
+                <p><strong>2.</strong> Partite da <strong>30 minuti</strong> ad oltranza.</p>
+                <p><strong>3.</strong> Punti: Vittoria 3, Pareggio 1, Sconfitta 0.</p>
+                <p class="font-bold border-t pt-2 text-blue-600 text-xs">SPAREGGI: Scontro diretto > Diff. Game > Vinti > Persi.</p>
+                <p class="bg-green-50 p-2 rounded text-green-700 font-medium">Finali per tutti (1ª vs 1ª, 2ª vs 2ª, ecc.).</p>
+            </div>
         </section>
     </main>
 
@@ -73,15 +99,48 @@
         const ADMIN_PASSWORD = "indio";
         let classificaGlobale = { A: [], B: [] };
 
+        // --- FUNZIONI CHAT ---
+        function inviaMessaggio() {
+            const user = document.getElementById('chat-user').value.trim();
+            const msg = document.getElementById('chat-msg').value.trim();
+            if (!user || !msg) return alert("Metti nome e messaggio, vez!");
+            
+            db.collection("trash_talk").add({
+                user: user,
+                text: msg,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('chat-msg').value = "";
+        }
+
+        function ascoltaChat() {
+            db.collection("trash_talk").orderBy("timestamp", "desc").limit(50).onSnapshot(snap => {
+                const container = document.getElementById('chat-container');
+                container.innerHTML = snap.docs.map(doc => {
+                    const data = doc.data();
+                    const time = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "";
+                    return `
+                    <div class="bg-gray-50 border border-gray-100 p-3 rounded-2xl rounded-tl-none self-start max-w-[90%]">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] font-black text-red-500 uppercase">${data.user}</span>
+                            <span class="text-[9px] text-gray-400 ml-4">${time}</span>
+                        </div>
+                        <p class="text-sm text-gray-800">${data.text}</p>
+                    </div>`;
+                }).join("");
+            });
+        }
+
+        // --- LOGICA TORNEO ---
         function toggleAdmin() {
             if (!isAdmin) {
-                const pass = prompt("Inserisci la password amministratore:");
+                const pass = prompt("Password:");
                 if (pass === ADMIN_PASSWORD) {
                     isAdmin = true;
                     document.getElementById('btn-admin').innerText = "Logout Admin";
                     document.getElementById('btn-admin').classList.replace('bg-blue-800', 'bg-green-600');
                     document.getElementById('btn-reset').classList.remove('hidden');
-                } else { alert("Password errata!"); }
+                }
             } else {
                 isAdmin = false;
                 document.getElementById('btn-admin').innerText = "Admin Login";
@@ -92,12 +151,11 @@
         }
 
         async function resetTorneo() {
-            if (!confirm("Sei sicuro? Tutti i punteggi verranno azzerati!")) return;
+            if (!confirm("Azzera tutto?")) return;
             const snapshot = await db.collection("partite").get();
             const batch = db.batch();
-            snapshot.forEach(doc => { batch.update(doc.ref, { scoreA: 0, scoreB: 0, conclusa: false }); });
+            snapshot.forEach(doc => batch.update(doc.ref, { scoreA: 0, scoreB: 0, conclusa: false }));
             await batch.commit();
-            alert("Torneo resettato!");
         }
 
         function openTab(tabId) {
@@ -108,68 +166,56 @@
         }
 
         function ascoltaSquadre() {
-            db.collection("squadre").onSnapshot((snapshot) => {
-                const contenitoreGironi = document.getElementById("gironi-container");
-                let htmlA = '<div class="bg-white p-4 rounded-lg shadow"><h3 class="font-bold border-b pb-2 mb-2 text-blue-600">Girone A</h3><ul>';
-                let htmlB = '<div class="bg-white p-4 rounded-lg shadow"><h3 class="font-bold border-b pb-2 mb-2 text-green-600">Girone B</h3><ul>';
-                snapshot.forEach((doc) => {
-                    const s = doc.data();
-                    const riga = `<li class="py-1 border-b text-sm">${s.nome}</li>`;
-                    if (s.girone === "A") htmlA += riga; else htmlB += riga;
+            db.collection("squadre").onSnapshot(snapshot => {
+                const container = document.getElementById("gironi-container");
+                let html = "";
+                ["A", "B"].forEach(g => {
+                    html += `<div class="bg-white p-4 rounded-xl shadow border-t-4 ${g==='A'?'border-blue-500':'border-green-500'}">
+                        <h3 class="font-bold mb-2 text-gray-400 uppercase text-[10px]">Girone ${g}</h3><ul>`;
+                    snapshot.forEach(doc => {
+                        const s = doc.data();
+                        if(s.girone === g) html += `<li class="py-2 border-b last:border-0 text-sm font-bold text-gray-700">${s.nome}</li>`;
+                    });
+                    html += `</ul></div>`;
                 });
-                contenitoreGironi.innerHTML = htmlA + '</ul></div>' + htmlB + '</ul></div>';
+                container.innerHTML = html;
                 calcolaClassificaDallePartite();
             });
         }
 
         function ascoltaPartite() {
-            const orariTurni = { 1: "15:00-15:30", 2: "15:30-16:00", 3: "16:00-16:30", 4: "16:30-17:00", 5: "17:00-17:30", 6: "17:30-18:00" };
-            db.collection("partite").orderBy("turno").onSnapshot((snapshot) => {
+            const orari = { 1: "15:00", 2: "15:30", 3: "16:00", 4: "16:30", 5: "17:00", 6: "17:30" };
+            db.collection("partite").orderBy("turno").onSnapshot(snapshot => {
                 const container = document.getElementById("partite-container");
                 container.innerHTML = ""; 
-                let turniRaggruppati = {};
+                let turni = {};
                 snapshot.forEach(doc => {
                     const p = doc.data();
-                    if (!turniRaggruppati[p.turno]) turniRaggruppati[p.turno] = [];
-                    turniRaggruppati[p.turno].push({id: doc.id, ...p});
+                    if (!turni[p.turno]) turni[p.turno] = [];
+                    turni[p.turno].push({id: doc.id, ...p});
                 });
 
-                Object.keys(turniRaggruppati).sort((a, b) => a - b).forEach(turno => {
-                    const infoRiposo = turniRaggruppati[turno].find(p => p.riposo)?.riposo || "";
-                    let htmlTurno = `<div class="mb-8">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <span class="bg-gray-800 text-white px-3 py-1 rounded-md text-xs font-bold uppercase">Turno ${turno}</span>
-                            <span class="text-gray-500 text-sm font-semibold italic">${orariTurni[turno] || ""}</span>
-                        </div><div class="space-y-3">`;
-
-                    turniRaggruppati[turno].sort((a,b) => a.campo - b.campo).forEach(p => {
-                        const inputA = isAdmin ? `<input type="number" value="${p.scoreA}" onchange="salvaPunteggio('${p.id}', 'A', this.value)" class="w-10 border rounded text-center p-1 bg-blue-50 font-bold">` : `<span class="w-10 text-center font-bold text-lg">${p.scoreA}</span>`;
-                        const inputB = isAdmin ? `<input type="number" value="${p.scoreB}" onchange="salvaPunteggio('${p.id}', 'B', this.value)" class="w-10 border rounded text-center p-1 bg-blue-50 font-bold">` : `<span class="w-10 text-center font-bold text-lg">${p.scoreB}</span>`;
-
-                        htmlTurno += `<div class="bg-white p-3 rounded-lg shadow-sm border flex justify-between items-center">
-                            <div class="text-[10px] font-bold text-blue-500 uppercase w-10 border-r pr-2">C. ${p.campo}</div>
-                            <div class="flex-grow flex items-center justify-around text-sm font-medium">
-                                <span class="w-24 text-right truncate font-bold text-gray-700">${p.teamA}</span>
-                                <div class="flex items-center space-x-2 mx-1">${inputA} <span class="text-gray-400">:</span> ${inputB}</div>
-                                <span class="w-24 text-left truncate font-bold text-gray-700">${p.teamB}</span>
-                            </div>
+                Object.keys(turni).forEach(t => {
+                    let html = `<div class="mb-6"><div class="flex justify-between mb-2"><span class="bg-gray-800 text-white px-2 py-0.5 rounded text-[10px] font-bold">TURNO ${t}</span><span class="text-gray-400 text-[10px] font-bold">${orari[t]||""}</span></div>`;
+                    turni[t].sort((a,b)=>a.campo-b.campo).forEach(p => {
+                        const scoreA = isAdmin ? `<input type="number" value="${p.scoreA}" onchange="salva('${p.id}','A',this.value)" class="w-10 border rounded text-center bg-blue-50 font-bold">` : `<span class="font-black text-blue-900">${p.scoreA}</span>`;
+                        const scoreB = isAdmin ? `<input type="number" value="${p.scoreB}" onchange="salva('${p.id}','B',this.value)" class="w-10 border rounded text-center bg-blue-50 font-bold">` : `<span class="font-black text-blue-900">${p.scoreB}</span>`;
+                        html += `<div class="bg-white p-3 rounded-lg shadow-sm border mb-2 flex justify-between items-center text-sm">
+                            <span class="text-[9px] font-bold text-blue-400 w-6">C${p.campo}</span>
+                            <span class="w-20 truncate text-right font-bold">${p.teamA}</span>
+                            <div class="flex items-center space-x-2">${scoreA}<span>-</span>${scoreB}</div>
+                            <span class="w-20 truncate font-bold">${p.teamB}</span>
                         </div>`;
                     });
-                    if (infoRiposo) {
-                        htmlTurno += `<div class="bg-amber-50 p-2 rounded-md border border-dashed border-amber-200 mt-2 text-center">
-                            <p class="text-[10px] text-amber-700 uppercase font-bold italic">☕ Riposano: ${infoRiposo}</p>
-                        </div>`;
-                    }
-                    container.innerHTML += htmlTurno + `</div></div>`;
+                    container.innerHTML += html + `</div>`;
                 });
                 calcolaClassificaDallePartite();
             });
         }
 
-        function salvaPunteggio(id, team, valore) {
-            const up = {};
-            up[`score${team}`] = parseInt(valore) || 0;
-            up.conclusa = true;
+        function salva(id, team, val) {
+            const up = { conclusa: true };
+            up[`score${team}`] = parseInt(val) || 0;
             db.collection("partite").doc(id).update(up);
         }
 
@@ -177,13 +223,12 @@
             const squadreSnap = await db.collection("squadre").get();
             const partiteSnap = await db.collection("partite").where("conclusa", "==", true).get();
             let squadreArr = [];
-            squadreSnap.forEach(doc => {
-                squadreArr.push({ nome: doc.data().nome, girone: doc.data().girone, punti: 0, fatti: 0, subiti: 0 });
-            });
-            let partiteConcluse = [];
-            partiteSnap.forEach(doc => partiteConcluse.push(doc.data()));
+            squadreSnap.forEach(doc => squadreArr.push({ nome: doc.data().nome, girone: doc.data().girone, punti: 0, fatti: 0, subiti: 0 }));
             
-            partiteConcluse.forEach(p => {
+            let partiteConcluse = [];
+            partiteSnap.forEach(doc => {
+                const p = doc.data();
+                partiteConcluse.push(p);
                 let sA = squadreArr.find(s => s.nome === p.teamA);
                 let sB = squadreArr.find(s => s.nome === p.teamB);
                 if (sA && sB) {
@@ -195,54 +240,42 @@
                 }
             });
 
-            const funzioneOrdinamento = (a, b) => {
+            const ord = (a, b) => {
                 if (b.punti !== a.punti) return b.punti - a.punti;
-                const scontro = partiteConcluse.find(p => (p.teamA === a.nome && p.teamB === b.nome) || (p.teamA === b.nome && p.teamB === a.nome));
-                if (scontro) {
-                    const pA = (scontro.teamA === a.nome) ? scontro.scoreA : scontro.scoreB;
-                    const pB = (scontro.teamA === b.nome) ? scontro.scoreA : scontro.scoreB;
+                const s = partiteConcluse.find(p => (p.teamA === a.nome && p.teamB === b.nome) || (p.teamA === b.nome && p.teamB === a.nome));
+                if (s) {
+                    const pA = (s.teamA === a.nome) ? s.scoreA : s.scoreB;
+                    const pB = (s.teamA === b.nome) ? s.scoreA : s.scoreB;
                     if (pA !== pB) return pB - pA;
                 }
-                if ((b.fatti - b.subiti) !== (a.fatti - a.subiti)) return (b.fatti - b.subiti) - (a.fatti - a.subiti);
-                return b.fatti - a.fatti;
+                return (b.fatti - b.subiti) - (a.fatti - a.subiti) || b.fatti - a.fatti;
             };
 
-            classificaGlobale.A = squadreArr.filter(s => s.girone === "A").sort(funzioneOrdinamento);
-            classificaGlobale.B = squadreArr.filter(s => s.girone === "B").sort(funzioneOrdinamento);
+            ["A", "B"].forEach(g => classificaGlobale[g] = squadreArr.filter(s => s.girone === g).sort(ord));
 
-            let htmlClassifica = '<h2 class="text-lg font-bold mb-4">Classifica Live</h2>';
+            let html = '<h2 class="text-lg font-bold mb-4 italic text-blue-800">Classifica Live</h2>';
             ["A", "B"].forEach(g => {
-                const filtrate = classificaGlobale[g];
-                htmlClassifica += `<div class="mb-8"><h3 class="font-bold text-gray-700 mb-2 px-2 uppercase text-sm">Girone ${g}</h3><div class="bg-white rounded-lg shadow overflow-hidden"><table class="w-full text-left border-collapse"><thead class="bg-gray-100 border-b text-[10px] uppercase text-gray-500 font-bold"><tr><th class="p-3">Team</th><th class="p-3 text-center">PT</th><th class="p-3 text-center">+/-</th><th class="p-3 text-center">GV</th><th class="p-3 text-center">GP</th></tr></thead><tbody class="text-sm">${filtrate.map(s => `<tr class="border-b"><td class="p-3 font-semibold text-gray-700">${s.nome}</td><td class="p-3 text-center font-bold text-blue-600">${s.punti}</td><td class="p-3 text-center font-medium ${s.fatti-s.subiti >=0 ? 'text-green-600':'text-red-600'}">${s.fatti-s.subiti}</td><td class="p-3 text-center text-gray-400">${s.fatti}</td><td class="p-3 text-center text-gray-400">${s.subiti}</td></tr>`).join("")}</tbody></table></div></div>`;
+                html += `<div class="mb-6"><h3 class="font-bold text-gray-400 text-[10px] uppercase mb-1 px-1">Girone ${g}</h3><div class="bg-white rounded-xl shadow overflow-hidden"><table class="w-full text-left text-xs"><thead class="bg-gray-50 text-[9px] text-gray-400 uppercase"><tr><th class="p-3">Team</th><th class="p-3 text-center">PT</th><th class="p-3 text-center">+/-</th></tr></thead><tbody>${classificaGlobale[g].map(s => `<tr class="border-b last:border-0"><td class="p-3 font-bold">${s.nome}</td><td class="p-3 text-center font-black text-blue-600">${s.punti}</td><td class="p-3 text-center font-bold ${s.fatti-s.subiti>=0?'text-green-600':'text-red-600'}">${s.fatti-s.subiti}</td></tr>`).join("")}</tbody></table></div></div>`;
             });
-            document.getElementById("classifica").innerHTML = htmlClassifica;
+            document.getElementById("classifica").innerHTML = html;
             renderFinali();
         }
 
         function renderFinali() {
             const container = document.getElementById("finali-container");
             const getT = (g, pos) => classificaGlobale[g][pos] ? classificaGlobale[g][pos].nome : `${pos + 1}° Gir. ${g}`;
-
             const f = [
-                { t: "Finalissima 1°/2° Posto", a: getT('A', 0), b: getT('B', 0), c: "border-yellow-500" },
-                { t: "Finale 3°/4° Posto", a: getT('A', 1), b: getT('B', 1), c: "border-gray-400" },
-                { t: "Finale 5°/6° Posto", a: getT('A', 2), b: getT('B', 2), c: "border-amber-700" },
-                { t: "Finale 7°/8° Posto", a: getT('A', 3), b: getT('B', 3), c: "border-blue-300" }
+                { t: "Finalissima 1°/2°", a: getT('A', 0), b: getT('B', 0), c: "border-yellow-500", bg: "bg-yellow-50" },
+                { t: "Finale 3°/4°", a: getT('A', 1), b: getT('B', 1), c: "border-gray-400", bg: "bg-gray-50" },
+                { t: "Finale 5°/6°", a: getT('A', 2), b: getT('B', 2), c: "border-amber-700", bg: "bg-amber-50" },
+                { t: "Finale 7°/8°", a: getT('A', 3), b: getT('B', 3), c: "border-blue-300", bg: "bg-blue-50" }
             ];
-
-            container.innerHTML = f.map(m => `
-                <div class="bg-white p-4 rounded-lg shadow border-l-4 ${m.c}">
-                    <h3 class="text-[10px] font-bold uppercase text-gray-400 mb-2">${m.t}</h3>
-                    <div class="flex justify-between items-center font-bold text-gray-800">
-                        <span class="w-5/12">${m.a}</span>
-                        <span class="w-2/12 text-center text-gray-300 text-xs">VS</span>
-                        <span class="w-5/12 text-right">${m.b}</span>
-                    </div>
-                </div>`).join("");
+            container.innerHTML = f.map(m => `<div class="${m.bg} p-4 rounded-xl shadow-sm border-l-4 ${m.c}"><h3 class="text-[9px] font-black uppercase text-gray-500 mb-1">${m.t}</h3><div class="flex justify-between font-black text-gray-800 text-xs"><span>${m.a}</span><span class="text-gray-300">VS</span><span>${m.b}</span></div></div>`).join("");
         }
 
         ascoltaSquadre();
         ascoltaPartite();
+        ascoltaChat();
     </script>
 </body>
 </html>
